@@ -1,5 +1,6 @@
-# k10plus-datavis
-Data visualisations for K10plus union catalogue
+# Data visualisations for union catalogues
+
+The aim of this tool is to visualise data of union catalogues analysed by [QA catalogue](https://github.com/pkiraly/qa-catalogue), which index the catalogue records with Apache Solr. This binding however is not very strong, one can easily modify the tool to work together with different technologies to fetch the data. 
 
 It renders the search results in two ways: 
 
