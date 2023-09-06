@@ -1,0 +1,8 @@
+catalogue_name=
+catalogue_url=
+qa_catalogue_base_url=
+qa_catalogue_solr_url="http://localhost:8983/solr/CATALOGUE/"
+year_field=YEAR_ss
+library_field=LIBRARY_ss
+library_names_file=
+library_metadata_file=
