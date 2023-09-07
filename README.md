@@ -29,11 +29,13 @@ Configuration parameters:
 
 ## Functionality
 
-The web application provides a search form and renders search results in two ways:
+The web application provides a search form and renders search results in multiple visualisations:
 
-1. a map displaying the settlements where the libraries holdings of the records founded. The use can click on a settlement and the information will be displayed on the number of holdings and the relevant libraries (multiple copies of the same record in one libraries are counted as one holding). The user can follow link to QA catalogue to find the books in that library, or to [lobid organisations](https://lobid.org/organisations), to find information about the library
+**holdings map**: a map displaying the settlements where the libraries holdings of the records founded. The use can click on a settlement and the information will be displayed on the number of holdings and the relevant libraries (multiple copies of the same record in one libraries are counted as one holding). The user can follow link to QA catalogue to find the books in that library, or to [lobid organisations](https://lobid.org/organisations), to find information about the library
 
-2. a barchart timeline displaying the publication year and amount of publicatiion in that year based on the records founded. If the user clicks on a bar, s/he is redirected to the QA catalogue hit list filtered by the year.
+**publication timeline**: a barchart timeline displaying the publication year and amount of publication in that year based on the records founded. If the user clicks on a bar, s/he is redirected to the QA catalogue hit list filtered by the year.
+
+More visualisations can be added on request, please let us known your ideas!
 
 ## API
 
