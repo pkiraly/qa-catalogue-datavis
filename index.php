@@ -34,6 +34,7 @@ $type = in_array(@$_GET['type'], ['map', 'timeline']) ? $_GET['type'] : 'map';
     </form>
     <button id="zoom-in">+</button>
     <button id="zoom-out">-</button>
+    <a href="https://github.com/pkiraly/qa-catalogue-datavis#readme">about</a>
   </header>
 
   <div id="timeline-container"></div>
