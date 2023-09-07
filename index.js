@@ -282,7 +282,7 @@ function render(selectedCities, europeProjection, cityScale) {
   const libraryNr = selectedCities.reduce((sum, d) => {return sum + d.libraries}, 0)
 
   d3.select('div#value-time')
-    .html(`${bookNr.toLocaleString()} copies available in ${selectedCities.length.toLocaleString()} cities, ${libraryNr.toLocaleString()} libraries`)
+    .html(`<b>${bookNr.toLocaleString()} copies available in ${selectedCities.length.toLocaleString()} cities, ${libraryNr.toLocaleString()} libraries</b>`)
 
   d3.select('#city-list').html(cityList(selectedCities))
 
@@ -359,7 +359,7 @@ const selectCity = id => {
     tooltipLineVertical.attr('x1', offsetX).attr('x2', offsetX)
     tooltipLineHorizontal.attr('y1', offsetY).attr('y2', offsetY)
 
-    d3.select('#variants').html(cityTooltipText(d))
+    d3.select('#variants').html("<b>"+cityTooltipText(d)+"</b>")
 
     d3.json('api/libraries.php?ids=' + d.ids).then(libraries => {
       libraries = Object.entries(libraries).map(([id,name]) => ({id,name}))
