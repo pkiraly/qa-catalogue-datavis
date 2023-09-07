@@ -370,13 +370,16 @@ const selectCity = id => {
         .data(libraries)
         .enter()
         .append('li')
-        .html(
-          lib => lib.name
-               + ' <a href="' + groupQueryLink(userQuery, lib.id) + '" target="_blank">'
-               + '<i class="fa fa-search" aria-hidden="true"></i></a>'
-        )
-
-
+        .html(lib => {
+          if (mapVis.qaCatalogueBaseURL) {
+            let url = mapVis.qaCatalogueBaseURL + '?tab=data&type=solr'
+            + '&query=' + encodeURIComponent(userQuery) + '&filters[]=001x400_ss:%22'
+            + lib.id + '%22'
+            return `${lib.name} <a href="${url}" target="_blank"><i class="fa fa-search" aria-hidden="true"></i></a>`
+          } else {
+            return lib.name
+          }
+        })
     })
 
   } else {
@@ -388,8 +391,6 @@ const selectCity = id => {
 }
 
 const groupQueryLink = (query, libId) => {
-  return mapVis.qaCatalogueBaseURL + '?tab=data&type=solr'
-       + '&query=' + encodeURIComponent(query) + '&filters[]=001x400_ss:%22' + libId + '%22'
 }
 
 const yearQueryLink = (query, year) => {
