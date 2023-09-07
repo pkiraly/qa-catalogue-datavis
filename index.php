@@ -28,11 +28,14 @@ $type = in_array(@$_GET['type'], ['map', 'timeline']) ? $_GET['type'] : 'map';
     </h1>
     <form style="display: inline;">
       <input type="text" name="query" id="search" value="<?= $query ?>">
-      <input type="submit" value="search catalogue!" id="submit">
+      <input type="submit" value="search" id="submit">
+      <?php if(@$conf['qa_catalogue_base_url']) { ?>
+      <a href="<?= $conf['qa_catalogue_base_url'] ?>" target="_blank">QA Catalogue</a>
+      <?php } ?>
       <input type="radio" name="type" value="map" id="type-map" <?php if ($type == 'map') { ?>checked="checked"<?php } ?>><label for="type-map">map</label>
       <input type="radio" name="type" value="timeline" id="type-timeline" <?php if ($type == 'timeline') { ?>checked="checked"<?php } ?>><label for="type-timeline">timeline</label>
+      <a href="https://github.com/pkiraly/qa-catalogue-datavis#readme" title="About this software" target="_blank"><i class="fa fa-info-circle" aria-hidden="true"></i></a>
     </form>
-    <a href="https://github.com/pkiraly/qa-catalogue-datavis#readme" title="About this software" target="_blank"><i class="fa fa-info-circle" aria-hidden="true"></i></a>
   </header>
 
   <div id="timeline-container"></div>
