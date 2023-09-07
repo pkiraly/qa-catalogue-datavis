@@ -390,9 +390,6 @@ const selectCity = id => {
   selectedCity = id
 }
 
-const groupQueryLink = (query, libId) => {
-}
-
 const yearQueryLink = (query, year) => {
   return mapVis.qaCatalogueBaseURL + '?tab=data&type=solr'
        + '&query=' + encodeURIComponent(query) + '&filters[]=011x40a_ss:%22' + year + '%22'
