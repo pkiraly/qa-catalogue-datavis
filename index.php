@@ -19,7 +19,7 @@ $type = in_array(@$_GET['type'], ['map', 'timeline']) ? $_GET['type'] : 'map';
   <link rel="shortcut icon" type="image/x-icon" href="./favicon.ico">
   <script src="https://d3js.org/d3.v6.min.js"></script>
   <script src="https://kit.fontawesome.com/2f4e00a49c.js" crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="geo.css" />
+  <link rel="stylesheet" href="layout.css" />
 </head>
 <body>
   <header>
