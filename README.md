@@ -1,31 +1,45 @@
-# Data visualisations for union catalogues
+# QA Catalogue Data Visualisations
 
-The aim of this tool is to visualise data of union catalogues analysed by [QA catalogue](https://github.com/pkiraly/qa-catalogue), which index the catalogue records with Apache Solr. This binding however is not very strong, one can easily modify the tool to work together with different technologies to fetch the data. 
+> Additional data visualization interfaces for library catalogues
 
-It renders the search results in two ways: 
-
-1. a map displaying the settlements where the libraries holding copies of the records founded. The use can click on a settlement and the information will be displayed on the number of copies and the relevant libraries. The user can follow link to QA catalogue to find the books in that library, or to Lobid, to find information about the library
-
-2. a barchart timeline displaying the publication year and amount of publicatiion in that year based on the records founded. If the user clicks on a bar, s/he is redirected to the QA catalogue hit list filtered by the year.
+This web applications provides multiple views of data from library catalogues analysed by [QA catalogue](https://github.com/pkiraly/qa-catalogue). It can be used with or independent from the default frontend [QA Catalogue Web](https://github.com/pkiraly/qa-catalogue-web) and also relies on the same solr index created by QA Catalogue. The application also serves as a demo how to make use of QA Catalogue results in additional ways.
 
 ## Installation
 
-1. download the repository, and move to a directory where a web server (we tested it with Apache HTTP server) can access it. Make sure that your web server can execute PHP scripts.
+Install this software into a web server with PHP enabled (Apache or Nginx with PHP-FPM).
 
-2. Copy the configuration template
+## Configuration
+
+Copy and fill out the configuration template
 
 ```bash
 cp configuration.cnf.template configuration.cnf
 ```
 
-3. edit configuration.cnf file
+Configuration parameters:
 
-- `catalogue_name`: the name of the catalogue to display in the user interface (e.g. K10plus)
-- `catalogue_url`: the URL of the catalogue. A link, that might point to a description, an OPAC, organisational website (e.g. https://opac.k10plus.de/)
-- `qa_catalogue_base_url`: the URL of a running instance of QA catalogue
-- `qa_catalogue_solr_url`: the URL of the Solr belonging to the QA catalogue. It should not be exposed to the internet, it will be accessed by the PHP scripts, not the browser (e.g. http://localhost:8983/solr/LIBRARY_NAME/)
-- `year_field`: a Solr field, conveying publication year (e.g. 011x40a_ss)
-- `library_field`: a Solr field conveying the holding library identifier (e.g. 001x400_ss)
-- `library_names_file`: a file in which each line contains library identifiers and library names in the format: "^\d+: \s+$"
-- `library_metadata_file`: a CSV file containing location metadata about the libraries as "ID,city,latitude,longitude"
+- `catalogue_name` (optional): name of the catalogue to display in the user interface (e.g. K10plus)
+- `catalogue_url` (optional): homepage URL of the catalogue (link to OPAC, description or organisational website, e.g. <https://opac.k10plus.de/>)
+- `qa_catalogue_base_url` (optional): URL of a running instance of [QA catalogue web](https://github.com/pkiraly/qa-catalogue-web) to link to
+- `qa_catalogue_solr_url` (required): URL of Solr collection of QA catalogue. It should not be exposed to the internet, it will be accessed by the PHP scripts, not the browser (e.g. http://localhost:8983/solr/LIBRARY_NAME/)
+- `year_field` (required): Solr field, conveying publication year (e.g. `011x40a_ss`)
+- `library_field` (required): Solr field conveying the holding library identifier (e.g. `001x400_ss`)
+- `library_names_file` (required): file where each line contains library identifiers and library names in the format: `^\d+: \s+$`
+- `library_metadata_file` (required): CSV file containing location metadata about the libraries as "ID,city,latitude,longitude"
+
+## Functionality
+
+The web application provides a search form and renders search results in two ways:
+
+1. a map displaying the settlements where the libraries holdings of the records founded. The use can click on a settlement and the information will be displayed on the number of holdings and the relevant libraries (multiple copies of the same record in one libraries are counted as one holding). The user can follow link to QA catalogue to find the books in that library, or to [lobid organisations](https://lobid.org/organisations), to find information about the library
+
+2. a barchart timeline displaying the publication year and amount of publicatiion in that year based on the records founded. If the user clicks on a bar, s/he is redirected to the QA catalogue hit list filtered by the year.
+
+## Contributing
+
+QA Catalogue Datavis is managed in a public git repository at <https://github.com/pkiraly/qa-catalogue-datavis>. Contributions are welcome!
+
+## License
+
+GNU General Public License
 
