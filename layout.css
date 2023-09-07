@@ -73,3 +73,13 @@ span.title {
 #library-list a {
   color: #063970
 }
+#library-list li {
+  list-style: none;
+}
+#library-list li::before {
+  color: maroon;
+  content: "▪";
+  display: inline-block;
+  width: 1em;
+  margin-left: -1em;
+}
