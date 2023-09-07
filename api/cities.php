@@ -1,5 +1,5 @@
 <?php
-
+include_once('../common-functions.php');
 $conf = parse_ini_file("../configuration.cnf", false, INI_SCANNER_TYPED);
 $query = @$_GET['query'] ?: '*:*';
 
