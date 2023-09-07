@@ -1,6 +1,19 @@
 body {
   font-family: sans-serif;
 }
+header {
+  padding-bottom: 0.5em;
+}
+header h1 {
+  display: inline;
+  font-size: 1em;
+}
+a {
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
 #value-time {
   margin: 0;
   padding: 0;
