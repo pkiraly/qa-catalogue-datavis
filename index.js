@@ -231,8 +231,9 @@ function displayMap() {
       const counts = city.counts.split(',');
       city.libCounts = {};
       for (var i= 0; i < ids.length; i++) {
-        city.libCounts[ids[i]] = counts[i];
+        city.libCounts[ids[i]] = +counts[i];
       }
+      console.log(city.libCounts);
       return city
     })
     cityScale.domain([1, d3.max(cities, d => d.n)])
@@ -371,9 +372,9 @@ const selectCity = id => {
           if (mapVis.qaCatalogueBaseURL) {
             let searchUrl = mapVis.qaCatalogueBaseURL + '?tab=data&type=solr'
                           + '&query=' + encodeURIComponent(userQuery)
-                          + `&filters[]={mapVis.libraryField}:%22`  + lib.id + '%22';
+                          + `&filters[]=${mapVis.libraryField}:%22`  + lib.id + '%22';
             let lobidUrl = 'http://lobid.org/organisations/' + lib.details.iln;
-            return `${lib.details.name} (${d.libCounts[lib.id]} copies)`
+            return `${lib.details.name} (${d.libCounts[lib.id].toLocaleString()} copies)`
                 + `&nbsp;<a href="${searchUrl}" target="_blank" title="search records in QA catalogue"><i class="fa fa-search" aria-hidden="true"></i></a>`
                 + `&nbsp;<a href="${lobidUrl}" target="_blank" title="Information about the organisation (hbz lobid)"><i class="fa-solid fa-globe" aria-hidden="true"></i></a>`
             ;
@@ -394,7 +395,7 @@ const selectCity = id => {
 
 const yearQueryLink = (query, year) => {
   return mapVis.qaCatalogueBaseURL + '?tab=data&type=solr'
-       + '&query=' + encodeURIComponent(query) + '&filters[]=011x40a_ss:%22' + year + '%22'
+       + '&query=' + encodeURIComponent(query) + `&filters[]=${mapVis.yearField}:%22` + year + '%22'
 }
 
 const cityList = (selectedCities) => {

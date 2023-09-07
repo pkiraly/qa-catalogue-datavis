@@ -32,14 +32,16 @@ $type = in_array(@$_GET['type'], ['map', 'timeline']) ? $_GET['type'] : 'map';
       <input type="radio" name="type" value="map" id="type-map" <?php if ($type == 'map') { ?>checked="checked"<?php } ?>><label for="type-map">map</label>
       <input type="radio" name="type" value="timeline" id="type-timeline" <?php if ($type == 'timeline') { ?>checked="checked"<?php } ?>><label for="type-timeline">timeline</label>
     </form>
-    <button id="zoom-in">+</button>
-    <button id="zoom-out">-</button>
     <a href="https://github.com/pkiraly/qa-catalogue-datavis#readme" title="About this software" target="_blank"><i class="fa fa-info-circle" aria-hidden="true"></i></a>
   </header>
 
   <div id="timeline-container"></div>
   <div id="map-container" style="display: flex; flex-direction: row;">
     <div id="map"></div>
+    <div id="zoom-icons">
+      <button id="zoom-in">+</button>
+      <button id="zoom-out">-</button>
+    </div>
 
     <div id="info-box" class="row" style="width: 650px;">
       <div id="value-time"></div>

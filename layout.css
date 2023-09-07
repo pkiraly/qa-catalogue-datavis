@@ -88,3 +88,6 @@ header a {
   color: #063970;
   opacity: 0.5;
 }
+#zoom-icons {
+  position: absolute;
+}
