@@ -1,3 +1,23 @@
+// localization
+const locale = {
+  en: {
+    'holdings': '1 holding | {n} holdings',
+    'in-libraries': 'in one library | in {n} libraries',
+    'cities': 'one city | {n} cities',
+    'search-qa': 'search records in QA catalogue',
+    'lobid-org-link': 'Information about the organisation (hbz lobid)'
+  }
+}
+const $t = msg => locale.en[msg] || msg
+const $n = n => (1*n).toLocaleString()
+const $tc = (msg, count) => {
+  msg = (locale.en[msg] || `{n} ${msg}`).split('|').map(s => s.trim())
+  msg = msg[count > 1 && msg.length>1 ? 1 : 0]
+  return msg.replaceAll('{n}',count.toLocaleString())
+}
+
+const cityTooltipText = d => `${d.name}: ` + $tc('holdings', d.n) + ' ' + $tc('in-libraries', d.n)
+
 // Setting up the svg element for D3 to draw in
 const width = 800,
       height = (width * 1.0)
@@ -280,7 +300,7 @@ function render(selectedCities, europeProjection, cityScale) {
   const libraryNr = selectedCities.reduce((sum, d) => {return sum + d.libraries}, 0)
 
   d3.select('div#value-time')
-    .html(`<b>${bookNr.toLocaleString()} copies available in ${selectedCities.length.toLocaleString()} cities, ${libraryNr.toLocaleString()} libraries</b>`)
+    .html(`<b>${$tc('cities',selectedCities.length)}: ${$tc('holdings',bookNr)} ${$tc('in-libraries',libraryNr)}</b>`)
 
   d3.select('#city-list').html(cityList(selectedCities))
 
@@ -299,8 +319,6 @@ function render(selectedCities, europeProjection, cityScale) {
       })
       .attr('fill-opacity', 0.5)
       .on('mouseover', (event, d) => {
-        // const text = `${d.name}: ${d.n} ` + (d.n == 1 ? 'copy' : 'copies')
-        //            + ` in ${d.libraries} `  + (d.libraries == 1 ? 'library' : 'libraries')
         tooltipSvg.attr('transform', `translate(${event.pageX},${event.pageY})`)
                   .style('visibility', 'visible')
         d3.select('#tooltip-text').html(cityTooltipText(d))
@@ -369,19 +387,18 @@ const selectCity = id => {
         .enter()
         .append('li')
         .html(lib => {
+          let html = `${lib.details.name} (${$tc('holdings',d.libCounts[lib.id])})`
           if (mapVis.qaCatalogueBaseURL) {
             let searchUrl = mapVis.qaCatalogueBaseURL + '?tab=data&type=solr'
                           + '&query=' + encodeURIComponent(userQuery)
                           + `&filters[]=${mapVis.libraryField}:%22`  + lib.id + '%22';
-            let lobidUrl = 'http://lobid.org/organisations/' + lib.details.iln;
-            return `${lib.details.name} (${d.libCounts[lib.id].toLocaleString()} copies)`
-                + `&nbsp;<a href="${searchUrl}" target="_blank" title="search records in QA catalogue"><i class="fa fa-search" aria-hidden="true"></i></a>`
-                + `&nbsp;<a href="${lobidUrl}" target="_blank" title="Information about the organisation (hbz lobid)"><i class="fa-solid fa-globe" aria-hidden="true"></i></a>`
-            ;
-            // <i class="fa-solid fa-globe"></i>
-          } else {
-            return lib.name
+            html += `&nbsp;<a href="${searchUrl}" target="_blank" title="${$t('search-qa')}"><i class="fa fa-search" aria-hidden="true"></i></a>`
           }
+          if (lib.details.isil) {
+            let lobidUrl = 'http://lobid.org/organisations/' + lib.details.isil
+            html += `&nbsp;<a href="${lobidUrl}" target="_blank" title="${$t('lobid-org-link')}"><i class="fa-solid fa-globe" aria-hidden="true"></i></a>`
+          }
+          return html
         })
     })
 
@@ -399,7 +416,7 @@ const yearQueryLink = (query, year) => {
 }
 
 const cityList = (selectedCities) => {
-  const all = selectedCities.map(city => `<tr><td class="city" data-id="${city.id}">${city.name}</td><td class="books">${city.n.toLocaleString()}</td></tr>`)
+  const all = selectedCities.map(city => `<tr><td class="city" data-id="${city.id}">${city.name}</td><td class="books">${$n(city.n)}</td></tr>`)
   const split_index = (all.length % 4 == 0) ? all.length / 4 : Math.ceil(all.length / 4)
 
   return '<div class="column"><table>' + all.slice(0, split_index).join('') + '</table></div>'
@@ -409,6 +426,3 @@ const cityList = (selectedCities) => {
 
 }
 
-const cityTooltipText = (d) =>
-    `${d.name}: ${d.n.toLocaleString()} ` + (d.n == 1 ? 'copy' : 'copies')
-             + ` in ${d.libraries.toLocaleString()} ` + (d.libraries == 1 ? 'library' : 'libraries')

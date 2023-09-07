@@ -17,7 +17,7 @@ foreach ($lines as $line) {
       $id = $match[1];
       $name = $match[2];
       if (preg_match('/^(.*) \[((DE|CH)-[^\]]+)\]/', $name, $code_match)) {
-        $libraries[$id] = ['name' => $code_match[1], 'iln' => str_replace('.', '', $code_match[2])];
+        $libraries[$id] = ['name' => $code_match[1], 'isil' => str_replace('.', '', $code_match[2])];
       } else {
         $libraries[$id] = ['name' => $name];
       }
