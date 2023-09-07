@@ -71,7 +71,8 @@ span.title {
   cursor: pointer;
 }
 #library-list a {
-  color: #063970
+  color: #063970;
+  opacity: 0.5;
 }
 #library-list li {
   list-style: none;
@@ -82,4 +83,8 @@ span.title {
   display: inline-block;
   width: 1em;
   margin-left: -1em;
+}
+header a {
+  color: #063970;
+  opacity: 0.5;
 }
