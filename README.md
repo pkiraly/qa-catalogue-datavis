@@ -35,6 +35,14 @@ The web application provides a search form and renders search results in two way
 
 2. a barchart timeline displaying the publication year and amount of publicatiion in that year based on the records founded. If the user clicks on a bar, s/he is redirected to the QA catalogue hit list filtered by the year.
 
+## API
+
+The application internally provides a HTTP API for queries:
+
+### /get-years.php
+
+Get a JSON Object with years mapped to number of holdings for a given `query`.
+
 ## Contributing
 
 QA Catalogue Datavis is managed in a public git repository at <https://github.com/pkiraly/qa-catalogue-datavis>. Contributions are welcome!
