@@ -17,6 +17,8 @@ foreach ($json->facet_counts->facet_fields->{$conf['year_field']} as $year => $c
   }
 }
 ksort($years);
+if (isset($$years[0]))
+  unset($$years[0]);
 
 header('Access-Control-Allow-Origin: *');
 header('Content-type: application/json');
