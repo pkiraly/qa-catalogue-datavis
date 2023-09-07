@@ -23,3 +23,10 @@ foreach ($lines as $line) {
 header('Access-Control-Allow-Origin: *');
 header('Content-type: application/json');
 print json_encode($libraries,JSON_PRETTY_PRINT);
+
+// str_starts_with was introduced in PHP 8
+if (!function_exists('str_starts_with')) {
+  function str_starts_with($haystack, $needle) {
+    return (string)$needle !== '' && strncmp($haystack, $needle, strlen($needle)) === 0;
+  }
+}
