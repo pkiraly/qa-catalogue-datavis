@@ -13,18 +13,6 @@ foreach ($lines as $line) {
     }
   }
 }
-/*
-if ($ids) {
-}
-
-  header('Access-Control-Allow-Origin: *');
-  $out = fopen('php://output', 'w');
-  fputcsv($out, array('id', 'name'));
-  foreach($libraries as $id => $name) {
-    fputcsv($out, array($id, $name));
-  }
-  fclose($out);
-}*/
 
 header('Access-Control-Allow-Origin: *');
 header('Content-type: application/json');
