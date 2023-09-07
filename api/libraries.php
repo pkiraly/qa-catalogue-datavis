@@ -6,12 +6,12 @@ if (!function_exists('str_starts_with')) {
   }
 }
 $conf = parse_ini_file("../configuration.cnf", false, INI_SCANNER_TYPED);
-$ids = explode(',',($_GET['ids']) ?: '');
+$ids = explode(',',@$_GET['ids'] ?: '');
 
 $file = $conf['library_names_file'];
-$lines = file(str_starts_with($file, '/') ? $file : "../$file");
+$file = str_starts_with($file, '/') ? $file : "../$file";
 $libraries = [];
-foreach ($lines as $line) {
+foreach (file($file) as $line) {
   if (preg_match('/^(\d+): (.*)$/', $line, $match)) {
     if (empty($ids) || in_array($match[1], $ids)) {
       $id = $match[1];

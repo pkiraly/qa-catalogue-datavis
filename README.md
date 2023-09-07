@@ -37,15 +37,19 @@ The web application provides a search form and renders search results in two way
 
 ## API
 
-The application internally provides a HTTP API for queries:
+The application internally provides a HTTP API for queries. The return format is not fully settled yet.
 
 ### api/libraries.php
 
-Get a JSON object with library identifiers (optionally filtered with query parameter `ids`) mapped to library names.
+Get a JSON object with library identifiers (optionally filtered with query parameter `ids`) mapped name and ISIL of the library.
 
 ### api/years.php
 
 Get a JSON Object with years mapped to number of holdings for a given `query`.
+
+### api/cities.php
+
+Get a JSON Object with city ids mapped to name, coordinates, number of holdings and list of library ids for a given `query`.
 
 ## Contributing
 

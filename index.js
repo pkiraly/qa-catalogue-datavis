@@ -16,7 +16,7 @@ const $tc = (msg, count) => {
   return msg.replaceAll('{n}',count.toLocaleString())
 }
 
-const cityTooltipText = d => `${d.name}: ` + $tc('holdings', d.n) + ' ' + $tc('in-libraries', d.n)
+const cityTooltipText = d => `${d.name}: ` + $tc('holdings', d.n) + ' ' + $tc('in-libraries', d.libraries.length)
 
 // Setting up the svg element for D3 to draw in
 const width = 800,
@@ -235,32 +235,31 @@ function displayMap() {
     .domain([1, 20])
     .range([1, 5])
 
-  const citiesUrl = 'get-libraries.php?query=' + userQuery
+  const citiesUrl = 'api/cities.php?query=' + encodeURIComponent(userQuery)
 
-  let cities = null
-  d3.csv(citiesUrl).then(data => {
-    cities = data.map(city => {
-      // city.id = 'id-' + ('x' + city.lat).replace('.', '_') + '-' + ('y' + city.long).replace('.', '_')
-      city.id = 'id-' + city.id
-      city.name = city.name
-      city.n = +city.count
+  d3.json(citiesUrl).then(data => {
+    const cities = Object.entries(data).map(([id,city]) => {
+      city.id = 'id-' + id
+      city.n = city.holdings.reduce((a, b) => a + b)
       city.lat = +city.lat
-      city.long = +city.long
-      city.libraries = +city.libraries
-      const ids = city.ids.split(',');
-      const counts = city.counts.split(',');
+      city.lon = +city.lon
+      city.libraries = city.libraries
+      const ids = city.libraries
+      const counts = city.holdings
       city.libCounts = {};
       for (var i= 0; i < ids.length; i++) {
         city.libCounts[ids[i]] = +counts[i];
       }
-      console.log(city.libCounts);
+      city.lon = +city.lon
       return city
-    })
+    }).sort((a,b) => b.n - a.n)
     cityScale.domain([1, d3.max(cities, d => d.n)])
     minLat = d3.min(cities, d => d.lat)
     maxLat = d3.max(cities, d => d.lat)
-    minLong = d3.min(cities, d => d.long)
-    maxLong = d3.max(cities, d => d.long)
+    minLong = d3.min(cities, d => d.lon)
+    maxLong = d3.max(cities, d => d.lon)
+    console.log(minLat, maxLat)
+    console.log(minLong, maxLong)
     const bounds = [europeProjection([minLong, minLat]), europeProjection([maxLong, maxLat])]
     var dx = bounds[1][0] - bounds[0][0],
         dy = bounds[1][1] - bounds[0][1],
@@ -310,8 +309,8 @@ function render(selectedCities, europeProjection, cityScale) {
     .join('circle')
       .attr('class', 'city')
       .attr('id', d => d.id)
-      .attr('cx', d => europeProjection([d.long, d.lat])[0])
-      .attr('cy', d => europeProjection([d.long, d.lat])[1])
+      .attr('cx', d => europeProjection([d.lon, d.lat])[0])
+      .attr('cy', d => europeProjection([d.lon, d.lat])[1])
       .attr('r', d => cityScale(d.n))
       .attr('title', d => d.name + ': ' + d.n)
       .attr('fill', d => {
@@ -377,8 +376,8 @@ const selectCity = id => {
 
     d3.select('#variants').html("<b>"+cityTooltipText(d)+"</b>")
 
-    d3.json('api/libraries.php?ids=' + d.ids).then(libraries => {
-      libraries = Object.entries(libraries).map(([id, details]) => ({id, details}))
+    d3.json('api/libraries.php?ids=' + d.libraries.join(",")).then(libraries => {
+      libraries = Object.entries(libraries).map(([id,details]) => ({id,details}))
       d3.select('#variants')
         .append('ul')
         .attr('id', 'library-list')
