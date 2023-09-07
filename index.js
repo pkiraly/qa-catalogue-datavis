@@ -115,7 +115,7 @@ function displayTimeline() {
       .attr("transform",
             "translate(" + margin.left + "," + margin.top + ")")
 
-  const timelineUrl = 'get-years.php?query=' + encodeURIComponent(userQuery)
+  const timelineUrl = 'api/years.php?query=' + encodeURIComponent(userQuery)
   console.log(timelineUrl)
   d3.json(timelineUrl).then(data => {
     const years = Object.keys(data).sort((a,b) => a-b).map(year => {
@@ -361,8 +361,8 @@ const selectCity = id => {
 
     d3.select('#variants').html(cityTooltipText(d))
 
-    d3.csv('get-city.php?query=' + d.ids).then(libraries => {
-      console.log(libraries)
+    d3.json('api/libraries.php?ids=' + d.ids).then(libraries => {
+      libraries = Object.entries(libraries).map(([id,name]) => ({id,name}))
       d3.select('#variants')
         .append('ul')
         .attr('id', 'library-list')

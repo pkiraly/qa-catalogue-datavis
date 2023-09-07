@@ -1,6 +1,6 @@
 <?php
 
-$conf = parse_ini_file("configuration.cnf", false, INI_SCANNER_TYPED);
+$conf = parse_ini_file("../configuration.cnf", false, INI_SCANNER_TYPED);
 $query = @$_GET['query'] ?: '*:*';
 
 $url = $conf['qa_catalogue_solr_url'] . 'select?'
