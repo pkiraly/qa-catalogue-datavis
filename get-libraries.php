@@ -19,9 +19,13 @@ foreach ($json->facet_counts->facet_fields->{$conf['library_field']} as $id => $
         $facets[$city]['count'] += $count;
         $facets[$city]['libraries'] += 1;
         $facets[$city]['ids'][] = $id;
+        $facets[$city]['counts'][] = $count;
       } else {
-        $facets[$city] = ['id' => $id, 'count' => $count, 'libraries' => 1, 'ids' => [$id],
-                          'lat' => $libraries[$id]['lat'], 'lon' => $libraries[$id]['lon']];
+        $facets[$city] = [
+          'id' => $id, 'count' => $count, 'libraries' => 1,
+          'ids' => [$id], 'counts' => [$count],
+          'lat' => $libraries[$id]['lat'], 'lon' => $libraries[$id]['lon']
+        ];
       }
     } else {
       // echo "library ID $id (with $count book) is not existing\n";
@@ -33,10 +37,12 @@ uasort($facets, 'countSort');
 
 header('Access-Control-Allow-Origin: *');
 $out = fopen('php://output', 'w');
-fputcsv($out, array('id', 'name', 'count', 'libraries', 'ids', 'lat', 'long'));
+fputcsv($out, array('id', 'name', 'count', 'libraries', 'ids', 'counts', 'lat', 'long'));
 foreach($facets as $city => $properties) {
   fputcsv($out, array($properties['id'], $city, $properties['count'], $properties['libraries'], 
-    implode(',', $properties['ids']), $properties['lat'], $properties['lon']));
+    implode(',', $properties['ids']),
+    implode(',', $properties['counts']),
+    $properties['lat'], $properties['lon']));
 }
 fclose($out);
 

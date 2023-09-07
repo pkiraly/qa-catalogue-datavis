@@ -116,19 +116,13 @@ function displayTimeline() {
             "translate(" + margin.left + "," + margin.top + ")")
 
   const timelineUrl = 'api/years.php?query=' + encodeURIComponent(userQuery)
-  console.log(timelineUrl)
   d3.json(timelineUrl).then(data => {
     const years = Object.keys(data).sort((a,b) => a-b).map(year => {
       return { year: +year, count: +data[year] }
     })
-    console.log(years)
-
-    console.log([d3.min(years, d => d.year), d3.max(years, d => d.year)])
-
     var x = d3.scaleLinear()
       .domain([d3.min(years, d => d.year), d3.max(years, d => d.year)])
       .range([ 0, width ])
-
 
     const barWidth = (width / (x.domain()[1] - x.domain()[0])) - 1
 
@@ -233,6 +227,12 @@ function displayMap() {
       city.lat = +city.lat
       city.long = +city.long
       city.libraries = +city.libraries
+      const ids = city.ids.split(',');
+      const counts = city.counts.split(',');
+      city.libCounts = {};
+      for (var i= 0; i < ids.length; i++) {
+        city.libCounts[ids[i]] = counts[i];
+      }
       return city
     })
     cityScale.domain([1, d3.max(cities, d => d.n)])
@@ -240,10 +240,7 @@ function displayMap() {
     maxLat = d3.max(cities, d => d.lat)
     minLong = d3.min(cities, d => d.long)
     maxLong = d3.max(cities, d => d.long)
-    console.log(minLat, maxLat)
-    console.log(minLong, maxLong)
     const bounds = [europeProjection([minLong, minLat]), europeProjection([maxLong, maxLat])]
-    console.log(bounds)
     var dx = bounds[1][0] - bounds[0][0],
         dy = bounds[1][1] - bounds[0][1],
         x = (bounds[0][0] + bounds[1][0]) / 2,
@@ -362,7 +359,7 @@ const selectCity = id => {
     d3.select('#variants').html("<b>"+cityTooltipText(d)+"</b>")
 
     d3.json('api/libraries.php?ids=' + d.ids).then(libraries => {
-      libraries = Object.entries(libraries).map(([id,name]) => ({id,name}))
+      libraries = Object.entries(libraries).map(([id, details]) => ({id, details}))
       d3.select('#variants')
         .append('ul')
         .attr('id', 'library-list')
@@ -372,10 +369,15 @@ const selectCity = id => {
         .append('li')
         .html(lib => {
           if (mapVis.qaCatalogueBaseURL) {
-            let url = mapVis.qaCatalogueBaseURL + '?tab=data&type=solr'
-            + '&query=' + encodeURIComponent(userQuery) + '&filters[]=001x400_ss:%22'
-            + lib.id + '%22'
-            return `${lib.name} <a href="${url}" target="_blank"><i class="fa fa-search" aria-hidden="true"></i></a>`
+            let searchUrl = mapVis.qaCatalogueBaseURL + '?tab=data&type=solr'
+                          + '&query=' + encodeURIComponent(userQuery)
+                          + `&filters[]={mapVis.libraryField}:%22`  + lib.id + '%22';
+            let lobidUrl = 'http://lobid.org/organisations/' + lib.details.iln;
+            return `${lib.details.name} (${d.libCounts[lib.id]} copies)`
+                + `&nbsp;<a href="${searchUrl}" target="_blank" title="search records in QA catalogue"><i class="fa fa-search" aria-hidden="true"></i></a>`
+                + `&nbsp;<a href="${lobidUrl}" target="_blank" title="Information about the organisation (hbz lobid)"><i class="fa-solid fa-globe" aria-hidden="true"></i></a>`
+            ;
+            // <i class="fa-solid fa-globe"></i>
           } else {
             return lib.name
           }

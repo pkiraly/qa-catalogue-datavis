@@ -9,7 +9,13 @@ $libraries = [];
 foreach ($lines as $line) {
   if (preg_match('/^(\d+): (.*)$/', $line, $match)) {
     if (empty($ids) || in_array($match[1], $ids)) {
-  	  $libraries[$match[1]] = $match[2];
+      $id = $match[1];
+      $name = $match[2];
+      if (preg_match('/^(.*) \[((DE|CH)-[^\]]+)\]/', $name, $code_match)) {
+        $libraries[$id] = ['name' => $code_match[1], 'iln' => str_replace('.', '', $code_match[2])];
+      } else {
+        $libraries[$id] = ['name' => $name];
+      }
     }
   }
 }

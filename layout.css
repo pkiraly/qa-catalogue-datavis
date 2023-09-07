@@ -64,11 +64,12 @@ div.tooltip {
   margin-top: 0;
   padding-left: 10px;
 }
-
 span.title {
   color: #063970;
 }
-
 #timeline-container rect:hover {
   cursor: pointer;
+}
+#library-list a {
+  color: #063970
 }

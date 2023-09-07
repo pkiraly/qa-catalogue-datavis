@@ -51,7 +51,9 @@ $type = in_array(@$_GET['type'], ['map', 'timeline']) ? $_GET['type'] : 'map';
     let mapVis = {
       mapCreated: false,
       timelineCreated: false,
-      qaCatalogueBaseURL: '<?= $conf['qa_catalogue_base_url'] ?>'
+      qaCatalogueBaseURL: '<?= $conf['qa_catalogue_base_url'] ?>',
+      libraryField: '<?= $conf['library_field'] ?>',
+      yearField: '<?= $conf['year_field'] ?>',
     }
   </script>
   <script type="module" src="index.js"></script>
