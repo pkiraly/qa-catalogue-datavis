@@ -140,8 +140,9 @@ function displayTimeline() {
     const years = Object.keys(data).sort((a,b) => a-b).map(year => {
       return { year: +year, count: +data[year] }
     })
+
     var x = d3.scaleLinear()
-      .domain([d3.min(years, d => d.year), d3.max(years, d => d.year)])
+      .domain([d3.min(years, d => d.year) - 5, d3.max(years, d => d.year) + 5])
       .range([ 0, width ])
 
     const barWidth = (width / (x.domain()[1] - x.domain()[0])) - 1
@@ -155,10 +156,23 @@ function displayTimeline() {
        .attr("transform", "translate(-10,0)rotate(-45)")
        .style("text-anchor", "end")
 
-    var y = d3.scaleLinear()
-      .domain([0, d3.max(years, d => d.count)])
-      .range([ height, 0])
+    let scaleType = 'sqrt2';
+    const maxCount = d3.max(years, d => d.count);
+    let y;
+    if (scaleType == 'log') {
+      y = d3.scaleLog().domain([0.3, maxCount]).range([height, 0]).nice();
+      // y = d3.scaleLog([0, maxCount], [0, height]).base(10);
+    } else if (scaleType == 'log2') {
+      y = d3.scaleLog().base(2).domain([0.1, maxCount]).range([height, 0]);
+    } else if (scaleType == 'sqrt') {
+      y = d3.scaleSqrt().domain([0, maxCount]).range([ height, 0]);
+    } else if (scaleType == 'sqrt2') {
+      y = d3.scalePow().exponent(0.2).domain([0, maxCount]).range([ height, 0]);
+    } else if (scaleType == 'lin') {
+      y = d3.scaleLinear().domain([0, maxCount]).range([ height, 0]);
+    }
 
+    console.log(y);
     svg.append("g")
       .call(d3.axisLeft(y))
 
@@ -168,9 +182,14 @@ function displayTimeline() {
      .enter()
      .append("rect")
       .attr("x", function(d) { return x(d.year); })
-      .attr("y", function(d) { return y(d.count); })
+      .attr("y", function(d) {
+        // console.log(d.count, '->', y(d.count));
+        return d.count == 0 ? 0 : y(d.count);
+      })
       .attr("width", barWidth)
-      .attr("height", function(d) { return height - y(d.count); })
+      .attr("height", function(d) {
+        return height - (d.count == 0 ? 0 : y(d.count));
+      })
       .attr("fill", "#063970")
       .attr("fill-opacity", 0.5)
       .on('mouseover', function(box, d) {

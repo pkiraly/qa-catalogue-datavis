@@ -17,7 +17,7 @@ $type = in_array(@$_GET['type'], ['map', 'timeline']) ? $_GET['type'] : 'map';
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><?= @$conf['catalogue_name'] ?> holdings visualisation</title>
   <link rel="shortcut icon" type="image/x-icon" href="./favicon.ico">
-  <script src="https://d3js.org/d3.v6.min.js"></script>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
   <script src="https://kit.fontawesome.com/2f4e00a49c.js" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="layout.css" />
 </head>
