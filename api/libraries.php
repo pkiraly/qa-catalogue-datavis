@@ -1,6 +1,6 @@
 <?php
-include_once('../common-functions.php');
-$conf = parse_ini_file("../configuration.cnf", false, INI_SCANNER_TYPED);
+include_once('./utils.php');
+
 $ids = explode(',',@$_GET['ids'] ?: '');
 
 $file = $conf['library_names_file'];
