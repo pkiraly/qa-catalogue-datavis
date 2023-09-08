@@ -1,7 +1,5 @@
 <?php
-include_once('../common-functions.php');
-$conf = parse_ini_file("../configuration.cnf", false, INI_SCANNER_TYPED);
-$query = @$_GET['query'] ?: '*:*';
+include_once('./utils.php');
 
 // get libraries
 $file = $conf['library_metadata_file'];
@@ -15,15 +13,10 @@ while (($line = fgetcsv($fh)) !== FALSE) {
   }
 fclose($fh);
 
-// solr query
-$url = $conf['qa_catalogue_solr_url'] . 'select?'
-     . 'facet.limit=1000&facet.mincount=1&facet=on&fl=id&rows=0&json.nl=map'
-     . '&facet.field=' . $conf['library_field'] 
-     . '&q=' . urlencode($query);
+$res = solr_facet_count_query($conf['library_field'], @$_GET['query'] ?: '*:*');
 
-$json = json_decode(file_get_contents($url));
 $facets = [];
-foreach ($json->facet_counts->facet_fields->{$conf['library_field']} as $id => $count) {
+foreach ($res as $id => $count) {
   if (preg_match('/^\d+$/', $id)) {
     if (isset($libraries[$id])) {
       $city = $libraries[$id]['city'];
