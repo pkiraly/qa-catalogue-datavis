@@ -93,30 +93,55 @@ let selectedType = urlParams.get('type') != null
                    && (urlParams.get('type') == 'map' || urlParams.get('type') == 'timeline')
                  ? urlParams.get('type')
                  : 'map'
-d3.select('#type-' + selectedType).property('checked', 'checked')
+// d3.select('#type-' + selectedType).property('checked', 'checked')
 
+/*
 d3.selectAll("input[name='type']").on("change", function(){
   selectedType = this.value
   selectType(selectedType)
 })
+*/
 
-selectType(selectedType)
+selectType(mapVis.selectedType)
 
 function selectType(selectedType) {
   if (selectedType == 'map') {
-    d3.select('#timeline-container').style("visibility", "hidden")
-    d3.select('#timeline-container').style("display", "none")
-    d3.select('#map-container').style("visibility", "visible")
-    d3.select('#map-container').style("display", "flex")
+    showOnly('#map-container');
+    // d3.select('#timeline-container').style("visibility", "hidden")
+    // d3.select('#timeline-container').style("display", "none")
+    // d3.select('#map-container').style("visibility", "visible")
+    // d3.select('#map-container').style("display", "flex")
     if (!mapVis.mapCreated)
       displayMap()
   } else if (selectedType == 'timeline') {
-    d3.select('#map-container').style("visibility", "hidden")
-    d3.select('#map-container').style("display", "none")
-    d3.select('#timeline-container').style("visibility", "visible")
-    d3.select('#timeline-container').style("display", "flex")
+    showOnly('#timeline-container');
+    // d3.select('#map-container').style("visibility", "hidden")
+    // d3.select('#map-container').style("display", "none")
+    // d3.select('#timeline-container').style("visibility", "visible")
+    // d3.select('#timeline-container').style("display", "flex")
     if (!mapVis.timelineCreated)
       displayTimeline()
+  } else if (selectedType == 'cataloging-timeline') {
+    showOnly('#cataloging-timeline-container');
+    // d3.select('#map-container').style("visibility", "hidden")
+    // d3.select('#map-container').style("display", "none")
+    // d3.select('#timeline-container').style("visibility", "visible")
+    // d3.select('#timeline-container').style("display", "flex")
+    if (!mapVis.catalogingTimelineCreated)
+      displayCatalogingTimeline()
+  }
+}
+
+function showOnly(container) {
+  const containers = ['#map-container', '#timeline-container', '#cataloging-timeline-container'];
+  for (let i = 0; i < containers.length; i++) {
+    if (container == containers[i]) {
+      d3.select(containers[i]).style("visibility", "visible")
+      d3.select(containers[i]).style("display", "flex")
+    } else {
+      d3.select(containers[i]).style("visibility", "hidden")
+      d3.select(containers[i]).style("display", "none")
+    }
   }
 }
 
@@ -202,6 +227,90 @@ function displayTimeline() {
         window.open(yearQueryLink(userQuery, d.year), '_blank')
       })
 
+  })
+}
+
+function displayCatalogingTimeline() {
+  mapVis.catalogingTimelineCreated = true;
+  var margin = {top: 30, right: 30, bottom: 70, left: 60},
+      width = 1500 - margin.left - margin.right,
+      height = 800 - margin.top - margin.bottom
+
+  // append the svg object to the body of the page
+  var svg = d3.select("#cataloging-timeline-container")
+      .append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")")
+
+  const timelineUrl = 'api/cataloging_date.php?query=' + encodeURIComponent(userQuery)
+  d3.json(timelineUrl).then(data => {
+    const years = Object.keys(data).sort((a,b) => a-b).map(year => {
+      return { year: +year, count: +data[year] }
+    })
+
+    var x = d3.scaleLinear()
+        .domain([d3.min(years, d => d.year) - 5, d3.max(years, d => d.year) + 5])
+        .range([ 0, width ])
+
+    const barWidth = (width / (x.domain()[1] - x.domain()[0])) - 1
+
+    // x axis
+    svg.append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x))
+        .selectAll("text")
+        .text(d => d.toString())
+        .attr("transform", "translate(-10,0)rotate(-45)")
+        .style("text-anchor", "end")
+
+    let scaleType = 'sqrt2';
+    const maxCount = d3.max(years, d => d.count);
+    let y;
+    if (scaleType == 'log') {
+      y = d3.scaleLog().domain([0.3, maxCount]).range([height, 0]).nice();
+      // y = d3.scaleLog([0, maxCount], [0, height]).base(10);
+    } else if (scaleType == 'log2') {
+      y = d3.scaleLog().base(2).domain([0.1, maxCount]).range([height, 0]);
+    } else if (scaleType == 'sqrt') {
+      y = d3.scaleSqrt().domain([0, maxCount]).range([ height, 0]);
+    } else if (scaleType == 'sqrt2') {
+      y = d3.scalePow().exponent(0.2).domain([0, maxCount]).range([ height, 0]);
+    } else if (scaleType == 'lin') {
+      y = d3.scaleLinear().domain([0, maxCount]).range([ height, 0]);
+    }
+
+    console.log(y);
+    svg.append("g")
+        .call(d3.axisLeft(y))
+
+    // Bars
+    svg.selectAll("mybar")
+        .data(years)
+        .enter()
+        .append("rect")
+        .attr("x", function(d) { return x(d.year); })
+        .attr("y", function(d) {
+          // console.log(d.count, '->', y(d.count));
+          return d.count == 0 ? 0 : y(d.count);
+        })
+        .attr("width", barWidth)
+        .attr("height", function(d) {
+          return height - (d.count == 0 ? 0 : y(d.count));
+        })
+        .attr("fill", "#063970")
+        .attr("fill-opacity", 0.5)
+        .on('mouseover', function(box, d) {
+          d3.select(this).attr('fill-opacity', 1.0)
+        })
+        .on('mouseout', function(box, d) {
+          d3.select(this).attr('fill-opacity', 0.5)
+        })
+        .on('click', function(box, d) {
+          window.open(yearQueryLink(userQuery, d.year), '_blank')
+        })
   })
 }
 
