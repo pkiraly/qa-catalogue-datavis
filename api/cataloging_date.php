@@ -2,6 +2,7 @@
 
 $conf = parse_ini_file("../configuration.cnf", false, INI_SCANNER_TYPED);
 $query = @$_GET['query'] ?: '*:*';
+$precision = @$_GET['precision'] ?: 'year';
 
 $limit = 10000;
 $offset = 0;
@@ -27,7 +28,7 @@ header('Content-type: application/json');
 print json_encode($years,JSON_PRETTY_PRINT);
 
 function processResult($json) {
-  global $years, $conf;
+  global $years, $conf, $precision;
 
   $continue = count(get_object_vars($json->facet_counts->facet_fields->{$conf['cataloging_date_field']})) > 0;
   if ($continue) {
@@ -35,7 +36,13 @@ function processResult($json) {
       list($library, $rawdate) = explode(':', $value);
       list($day, $month, $year) = explode('-', $rawdate);
       $year = ((int) $year < 60) ? (int) '20' . $year : (int) '19' . $year;
-      $key = sprintf('%s-%s-%s', $year, $month, $day);
+      if ($precision == 'day') {
+        $key = sprintf('%s-%s-%s', $year, $month, $day);
+      } else if ($precision == 'month') {
+          $key = sprintf('%s-%s', $year, $month);
+      } else {
+        $key = $year;
+      }
       if (!isset($years[$key]))
         $years[$key] = 0;
       $years[$key] += $count;
