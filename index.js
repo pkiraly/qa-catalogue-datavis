@@ -266,7 +266,7 @@ function displayCatalogingTimeline() {
         .attr("transform", "translate(-10,0)rotate(-45)")
         .style("text-anchor", "end")
 
-    let scaleType = 'sqrt2';
+    let scaleType = 'lin';
     const maxCount = d3.max(years, d => d.count);
     let y;
     if (scaleType == 'log') {
