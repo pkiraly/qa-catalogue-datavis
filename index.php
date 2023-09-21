@@ -17,10 +17,14 @@ $type = in_array(@$_GET['type'], ['map', 'timeline', 'zoomable-timeline', 'catal
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><?= @$conf['catalogue_name'] ?> holdings visualisation</title>
   <link rel="shortcut icon" type="image/x-icon" href="./favicon.ico">
-  <script src="https://d3js.org/d3.v7.min.js"></script>
-  <script src="https://kit.fontawesome.com/2f4e00a49c.js" crossorigin="anonymous"></script>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+  <!-- script src="https://d3js.org/d3.v7.min.js"></script -->
+  <script src="lib/d3.v7.min.js"></script>
+  <!-- script src="https://kit.fontawesome.com/2f4e00a49c.js" crossorigin="anonymous"></script -->
+  <script src="lib/2f4e00a49c.js" crossorigin="anonymous"></script>
+  <!-- link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous" -->
+  <!-- script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script -->
+  <link href="lib/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+  <script src="lib/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="layout.css" />
 </head>
 <body>
@@ -46,16 +50,16 @@ $type = in_array(@$_GET['type'], ['map', 'timeline', 'zoomable-timeline', 'catal
 
   <ul class="nav nav-tabs">
     <li class="nav-item">
-      <a class="nav-link <?php if ($type == 'map') { ?>active<?php } ?>" aria-current="page" href="?query=<?= $query ?>&type=map">Holdings map</a>
+      <a class="nav-link <?php if ($type == 'map') { ?>active<?php } ?>" aria-current="page" href="?query=<?= urlencode($query) ?>&type=map">Holdings map</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link <?php if ($type == 'timeline') { ?>active<?php } ?>" href="?query=<?= $query ?>&type=timeline">Publication timeline</a>
+      <a class="nav-link <?php if ($type == 'timeline') { ?>active<?php } ?>" href="?query=<?= urlencode($query) ?>&type=timeline">Publication timeline</a>
     </li>
     <li class="nav-item">
-       <a class="nav-link <?php if ($type == 'zoomable-timeline') { ?>active<?php } ?>" href="?query=<?= $query ?>&type=zoomable-timeline">Publication timeline (zoomable)</a>
+       <a class="nav-link <?php if ($type == 'zoomable-timeline') { ?>active<?php } ?>" href="?query=<?= urlencode($query) ?>&type=zoomable-timeline">Publication timeline (zoomable)</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link <?php if ($type == 'cataloging-timeline') { ?>active<?php } ?>" href="?query=<?= $query ?>&type=cataloging-timeline">Cataloging timeline</a>
+      <a class="nav-link <?php if ($type == 'cataloging-timeline') { ?>active<?php } ?>" href="?query=<?= urlencode($query) ?>&type=cataloging-timeline">Cataloging timeline</a>
     </li>
   </ul>
 
@@ -93,6 +97,9 @@ $type = in_array(@$_GET['type'], ['map', 'timeline', 'zoomable-timeline', 'catal
       selectedType: '<?= $type ?>',
     }
   </script>
+  <?php if ($type == 'zoomable-timeline') { ?>
+    <script type="module" src="js/zoom.js"></script>
+  <?php } ?>
   <script type="module" src="index.js"></script>
 </body>
 </html>
