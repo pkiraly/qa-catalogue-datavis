@@ -91,3 +91,8 @@ header a {
 #zoom-icons {
   position: absolute;
 }
+
+.details-bars rect:hover {
+  fill-opacity: 1.0;
+  cursor: pointer;
+}

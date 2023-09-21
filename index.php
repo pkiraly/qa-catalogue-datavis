@@ -97,6 +97,7 @@ $type = in_array(@$_GET['type'], ['map', 'timeline', 'zoomable-timeline', 'catal
       selectedType: '<?= $type ?>',
     }
   </script>
+  <script type="module" src="js/common.js"></script>
   <?php if ($type == 'zoomable-timeline') { ?>
     <script type="module" src="js/zoom.js"></script>
   <?php } ?>

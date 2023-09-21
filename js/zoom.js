@@ -1,3 +1,5 @@
+import { yearQueryLink } from './common.js';
+
 const zoomVars = {};
 
 export function displayZoomableTimeline() {
@@ -175,25 +177,19 @@ function removeOldElements(bars) {
 
 function updateExistingElements(bars, currentXScale, currentYScale) {
     // UPDATE old elements present in new data
-    bars.attr("class", "bar")
-        .transition()
+    let currentBars = bars.attr("class", "bar");
+    currentBars.transition()
         .attr("x", d => currentXScale(d.date))  // old elememnts in new data transition to their new position
         .attr("y", d => currentYScale(d.count)) // old elememnts in new data transition to their y position
         .attr("height", (d, i) => zoomVars.height - currentYScale(d.count)) // old elememnts in new data transition to their correct height
         .attr("width", zoomVars.bandWidth)
         .attr("fill", "#063970")
         .attr("fill-opacity", 0.5)
-    /*
-    .on('mouseover', function(box, d) {
-      d3.select(this).attr('fill-opacity', 1.0)
-    })
-    .on('mouseout', function(box, d) {
-      d3.select(this).attr('fill-opacity', 0.5)
-    })
-    .on('click', function(box, d) {
-      window.open(yearQueryLink(userQuery, d.year), '_blank')
-    })
-     */
+    ;
+    currentBars
+      .on('click', function(box, d) {
+        window.open(yearQueryLink(mapVis.query, d.year), '_blank');
+      })
     ;
 }
 
@@ -201,34 +197,26 @@ function enterNewElements(bars, currentXScale, currentYScale) {
     // ENTER new elements present in new data
     // EXIT and UPDATE above will not apply first time render as there is no change to the data.
 
-    const height = (bars._parents[0].getAttribute('class') == 'overview-bars')
-                             ? zoomVars.focusHeight
-                             : zoomVars.height;
-    bars.enter()
+    let isOverview = bars._parents[0].getAttribute('class') == 'overview-bars';
+    const height = isOverview ? zoomVars.focusHeight : zoomVars.height;
+
+    let currentBars = bars.enter()
         .append('rect')
         .attr("class", "bar") // fill green
         .attr("x", d => currentXScale(d.date))
         .attr("y", height) // bars start on xaxis or position y=height
         .attr("height", d => 0) // bars start with zero height
         .attr("width", zoomVars.bandWidth)
-        .transition()
+        .on('click', (box, d) => {
+            window.open(yearQueryLink(mapVis.query, d.year), '_blank')
+        })
+    ;
+
+    currentBars.transition()
         .attr("y", (d, i) => currentYScale(d.count))
         .attr("height", (d, i) => height - currentYScale(d.count))
         .attr("fill", "#063970")
-        .attr("fill-opacity", 0.5)
-    /*
-    .on('mouseover', function(box, d) {
-      d3.select(this).attr('fill-opacity', 1.0)
-    })
-    .on('mouseout', function(box, d) {
-      d3.select(this).attr('fill-opacity', 0.5)
-    })
-    .on('click', function(box, d) {
-      window.open(yearQueryLink(userQuery, d.year), '_blank')
-    })
-     */
-    ;
-    // d3.select('g.details-bars rect.bar').on('click', () => console.log('hello'));
+        .attr("fill-opacity", 0.5);
 }
 
 function brushed(event) {

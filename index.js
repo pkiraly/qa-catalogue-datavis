@@ -1,4 +1,5 @@
 import { displayZoomableTimeline } from './js/zoom.js';
+import { yearQueryLink } from './js/common.js';
 
 // localization
 const locale = {
@@ -530,11 +531,6 @@ const selectCity = id => {
   }
 
   selectedCity = id
-}
-
-const yearQueryLink = (query, year) => {
-  return mapVis.qaCatalogueBaseURL + '?tab=data&type=solr'
-       + '&query=' + encodeURIComponent(query) + `&filters[]=${mapVis.yearField}:%22` + year + '%22'
 }
 
 const cityList = (selectedCities) => {
