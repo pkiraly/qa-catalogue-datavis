@@ -7,7 +7,7 @@ if (file_exists("configuration.cnf")) {
 }
 
 $query = @$_GET['query'] ?: '';
-$type = in_array(@$_GET['type'], ['map', 'timeline', 'cataloging-timeline']) ? $_GET['type'] : 'map';
+$type = in_array(@$_GET['type'], ['map', 'timeline', 'zoomable-timeline', 'cataloging-timeline']) ? $_GET['type'] : 'map';
 
 ?><!DOCTYPE html>
 <html>
@@ -52,12 +52,12 @@ $type = in_array(@$_GET['type'], ['map', 'timeline', 'cataloging-timeline']) ? $
       <a class="nav-link <?php if ($type == 'timeline') { ?>active<?php } ?>" href="?query=<?= $query ?>&type=timeline">Publication timeline</a>
     </li>
     <li class="nav-item">
+       <a class="nav-link <?php if ($type == 'zoomable-timeline') { ?>active<?php } ?>" href="?query=<?= $query ?>&type=zoomable-timeline">Publication timeline (zoomable)</a>
+    </li>
+    <li class="nav-item">
       <a class="nav-link <?php if ($type == 'cataloging-timeline') { ?>active<?php } ?>" href="?query=<?= $query ?>&type=cataloging-timeline">Cataloging timeline</a>
     </li>
   </ul>
-
-  <div id="timeline-container"></div>
-  <div id="cataloging-timeline-container"></div>
 
   <div id="map-container" style="display: flex; flex-direction: row;">
     <div id="map"></div>
@@ -72,10 +72,18 @@ $type = in_array(@$_GET['type'], ['map', 'timeline', 'cataloging-timeline']) ? $
       <div id="variants"></div>
     </div>  
   </div>
+
+  <div id="timeline-container"></div>
+  <div id="zoomable-timeline-container">
+    <div id="chart"></div>
+    <div id="overview"></div>
+  </div>
+  <div id="cataloging-timeline-container"></div>
   <script type="text/javascript">
     let mapVis = {
       mapCreated: false,
       timelineCreated: false,
+      zoomableTimelineCreated: false,
       catalogingTimelineCreated: false,
       qaCatalogueBaseURL: '<?= $conf['qa_catalogue_base_url'] ?>',
       libraryField: '<?= $conf['library_field'] ?>',
