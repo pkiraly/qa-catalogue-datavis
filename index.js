@@ -382,8 +382,6 @@ function displayMap() {
     maxLat = d3.max(cities, d => d.lat)
     minLong = d3.min(cities, d => d.lon)
     maxLong = d3.max(cities, d => d.lon)
-    console.log(minLat, maxLat)
-    console.log(minLong, maxLong)
     const bounds = [europeProjection([minLong, minLat]), europeProjection([maxLong, maxLat])]
     var dx = bounds[1][0] - bounds[0][0],
         dy = bounds[1][1] - bounds[0][1],

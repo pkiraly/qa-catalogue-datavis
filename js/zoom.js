@@ -4,7 +4,7 @@ const zoomVars = {};
 
 export function displayZoomableTimeline() {
     mapVis.zoomableTimelineCreated = true;
-    const margin = {top: 30, right: 30, bottom: 20, left: 60};
+    const margin = {top: 30, right: 30, bottom: 40, left: 60};
     zoomVars.outerWidth = 1500;
     zoomVars.width = zoomVars.outerWidth - margin.left - margin.right;
     zoomVars.height = 400 - margin.top - margin.bottom;
@@ -22,12 +22,27 @@ export function displayZoomableTimeline() {
         .attr("width", zoomVars.outerWidth)
         .attr("height", zoomVars.height + margin.top + margin.bottom)
     ;
+    svg.append('text')
+        .attr('id', 'details-text')
+        .attr("width", zoomVars.width)
+        .attr("x", margin.left + (zoomVars.width / 2))
+        .attr("y", margin.top + zoomVars.height + margin.bottom)
+        .text('zoomed area')
+        .attr('text-anchor', 'middle')
+    ;
 
     const overviewSvg = d3
         .select("#overview")
         .append("svg")
         .attr("width", zoomVars.outerWidth)
         .attr("height", margin.top + zoomVars.focusHeight + margin.bottom)
+    ;
+    overviewSvg.append('text')
+        .attr("width", zoomVars.width)
+        .attr("x", margin.left + (zoomVars.width / 2))
+        .attr("y", margin.top + zoomVars.focusHeight + margin.bottom)
+        .text('overview timeline - use the mouse to select area to zoom')
+        .attr('text-anchor', 'middle')
     ;
 
     zoomVars.detailsBarGroup = svg.append("g")
@@ -118,7 +133,7 @@ function updateDetailsChart() {
 
     const minX = zoomVars.xScale.domain()[0].getFullYear();
     const maxX = zoomVars.xScale.domain()[1].getFullYear();
-    let range = Math.max(1, (maxX - minX));
+    let range = Math.max(3, (maxX - minX));
     // d3.select('h1').html(`${minX}&mdash;${maxX}`);
     zoomVars.bandWidth = Math.round(zoomVars.width / range)
     if (zoomVars.bandWidth > 10)
@@ -137,9 +152,11 @@ function updateOverviewChart() {
     updateScales(zoomVars.xOverviewScale, zoomVars.yOverviewScale);
     updateAxes(zoomVars.xOverviewAxis, zoomVars.xOverviewScale, zoomVars.yOverviewAxis, zoomVars.yOverviewScale);
 
-    const minX = zoomVars.xOverviewScale.domain()[0].getFullYear();
-    const maxX = zoomVars.xOverviewScale.domain()[1].getFullYear();
-    let range = Math.max(1, (maxX - minX));
+    const minYear = zoomVars.xOverviewScale.domain()[0].getFullYear();
+    const maxYear = zoomVars.xOverviewScale.domain()[1].getFullYear();
+    if (!isNaN(minYear) && !isNaN(maxYear))
+      d3.select('#details-text').text(`publications between ${minYear}-${maxYear}`);
+    let range = Math.max(2, (maxYear - minYear));
     zoomVars.bandWidth = Math.round(zoomVars.width / range)
     if (zoomVars.bandWidth > 10)
         zoomVars.bandWidth -= 1;
@@ -230,6 +247,7 @@ function brushed(event) {
     } else {
         let minYear = zoomVars.xOverviewScale.invert(extent[0]).getFullYear();
         let maxYear = zoomVars.xOverviewScale.invert(extent[1]).getFullYear();
+        d3.select('#details-text').text(`publications between ${minYear}-${maxYear}`);
         zoomVars.currentDataset = zoomVars.years.filter(d => (d.year >= minYear && d.year <= maxYear));
         zoomVars.brushInit = 'automate';
         // area.select(".brush").call(brush.move, null) // This remove the grey brush area as soon as the selection has been done
