@@ -1,5 +1,7 @@
 import { displayZoomableTimeline } from './js/zoom.js';
 import { yearQueryLink } from './js/common.js';
+import {PublicationTimelineConfiguration} from "./js/PublicationTimelineConfiguration.js";
+import {CatalogingTimelineConfiguration} from "./js/CatalogingTimelineConfiguration.js";
 
 // localization
 const locale = {
@@ -112,18 +114,18 @@ function selectType(selectedType) {
     showOnly('#map-container');
     if (!mapVis.mapCreated)
       displayMap()
-  } else if (selectedType == 'timeline') {
-    showOnly('#timeline-container');
+//  } else if (selectedType == 'timeline') {
+//    showOnly('#timeline-container');
+//    if (!mapVis.timelineCreated)
+//      displayTimeline()
+  } else if (selectedType == 'publication-timeline') {
+    showOnly('#publication-timeline-container');
     if (!mapVis.timelineCreated)
-      displayTimeline()
-  } else if (selectedType == 'zoomable-timeline') {
-    showOnly('#zoomable-timeline-container');
-    if (!mapVis.timelineCreated)
-      displayZoomableTimeline()
+      displayZoomableTimeline(new PublicationTimelineConfiguration());
   } else if (selectedType == 'cataloging-timeline') {
     showOnly('#cataloging-timeline-container');
     if (!mapVis.catalogingTimelineCreated)
-      displayCatalogingTimeline()
+      displayZoomableTimeline(new CatalogingTimelineConfiguration());
   }
 }
 
@@ -132,7 +134,7 @@ function showOnly(container) {
   for (let i = 0; i < containers.length; i++) {
     if (container == containers[i]) {
       d3.select(containers[i]).style("visibility", "visible")
-      d3.select(containers[i]).style("display", "flex")
+      d3.select(containers[i]).style("display", "block")
     } else {
       d3.select(containers[i]).style("visibility", "hidden")
       d3.select(containers[i]).style("display", "none")

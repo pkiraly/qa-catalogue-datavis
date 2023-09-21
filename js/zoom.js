@@ -1,9 +1,11 @@
-import { yearQueryLink } from './common.js';
+import { ZoomableTimelineConfiguration } from './ZoomableTimelineConfiguration.js';
 
 const zoomVars = {};
+let zoomConfiguration = null;
 
-export function displayZoomableTimeline() {
-    mapVis.zoomableTimelineCreated = true;
+export function displayZoomableTimeline(timelineConfiguration) {
+    mapVis.publicationTimelineCreated = true;
+    zoomVars.timelineConfiguration = timelineConfiguration;
     const margin = {top: 30, right: 30, bottom: 40, left: 60};
     zoomVars.outerWidth = 1500;
     zoomVars.width = zoomVars.outerWidth - margin.left - margin.right;
@@ -17,30 +19,33 @@ export function displayZoomableTimeline() {
     zoomVars.brushInit = 'manual';
 
     const svg = d3
-        .select("#chart")
+        .select(timelineConfiguration.container + " #chart")
         .append("svg")
         .attr("width", zoomVars.outerWidth)
         .attr("height", zoomVars.height + margin.top + margin.bottom)
     ;
     svg.append('text')
         .attr('id', 'details-text')
+        .attr('class', 'chart-label')
         .attr("width", zoomVars.width)
         .attr("x", margin.left + (zoomVars.width / 2))
-        .attr("y", margin.top + zoomVars.height + margin.bottom)
+        .attr("y", margin.top + zoomVars.height + (margin.bottom * 0.8))
         .text('zoomed area')
         .attr('text-anchor', 'middle')
     ;
 
     const overviewSvg = d3
-        .select("#overview")
+        .select(timelineConfiguration.container + " #overview")
         .append("svg")
         .attr("width", zoomVars.outerWidth)
         .attr("height", margin.top + zoomVars.focusHeight + margin.bottom)
     ;
     overviewSvg.append('text')
         .attr("width", zoomVars.width)
+        .attr('class', 'chart-label')
+        .attr('height', margin.bottom)
         .attr("x", margin.left + (zoomVars.width / 2))
-        .attr("y", margin.top + zoomVars.focusHeight + margin.bottom)
+        .attr("y", margin.top + zoomVars.focusHeight + (margin.bottom * 0.8))
         .text('overview timeline - use the mouse to select area to zoom')
         .attr('text-anchor', 'middle')
     ;
@@ -107,15 +112,17 @@ export function displayZoomableTimeline() {
         .attr("class", "brush")
         .call(brush);
 
-    updateData();
+    updateData(timelineConfiguration.apiUrl);
 }
 
-function updateData() {
-    const timelineUrl = 'api/years.php?query=' + encodeURIComponent(mapVis.query)
+function updateData(apiUrl) {
+    // const timelineUrl = 'api/years.php?query=' + encodeURIComponent(mapVis.query)
+    const timelineUrl = apiUrl + '?query=' + encodeURIComponent(mapVis.query)
     d3.json(timelineUrl).then(data => {
         zoomVars.years = Object
             .keys(data)
             .map(year => ({
+                yearString: year,
                 year: +year,
                 date: d3.timeParse("%Y")(+year),
                 count: +data[year],
@@ -155,7 +162,7 @@ function updateOverviewChart() {
     const minYear = zoomVars.xOverviewScale.domain()[0].getFullYear();
     const maxYear = zoomVars.xOverviewScale.domain()[1].getFullYear();
     if (!isNaN(minYear) && !isNaN(maxYear))
-      d3.select('#details-text').text(`publications between ${minYear}-${maxYear}`);
+      d3.select('#details-text').text(zoomVars.timelineConfiguration.detailsChartLabel(minYear, maxYear));
     let range = Math.max(2, (maxYear - minYear));
     zoomVars.bandWidth = Math.round(zoomVars.width / range)
     if (zoomVars.bandWidth > 10)
@@ -203,11 +210,15 @@ function updateExistingElements(bars, currentXScale, currentYScale) {
         .attr("fill", "#063970")
         .attr("fill-opacity", 0.5)
     ;
-    currentBars
-      .on('click', function(box, d) {
-        window.open(yearQueryLink(mapVis.query, d.year), '_blank');
-      })
-    ;
+
+    if (zoomVars.timelineConfiguration.hasLink) {
+      currentBars
+        .on('click', function(box, d) {
+          console.log(d);
+          window.open(zoomVars.timelineConfiguration.link(mapVis.query, d.yearString), '_blank');
+        })
+      ;
+    }
 }
 
 function enterNewElements(bars, currentXScale, currentYScale) {
@@ -223,11 +234,14 @@ function enterNewElements(bars, currentXScale, currentYScale) {
         .attr("x", d => currentXScale(d.date))
         .attr("y", height) // bars start on xaxis or position y=height
         .attr("height", d => 0) // bars start with zero height
-        .attr("width", zoomVars.bandWidth)
-        .on('click', (box, d) => {
-            window.open(yearQueryLink(mapVis.query, d.year), '_blank')
-        })
-    ;
+        .attr("width", zoomVars.bandWidth);
+
+    if (zoomVars.timelineConfiguration.hasLink) {
+      currentBars.on('click', (box, d) => {
+        console.log(d);
+        window.open(zoomVars.timelineConfiguration.link(mapVis.query, d.yearString), '_blank')
+      });
+    }
 
     currentBars.transition()
         .attr("y", (d, i) => currentYScale(d.count))
@@ -247,7 +261,7 @@ function brushed(event) {
     } else {
         let minYear = zoomVars.xOverviewScale.invert(extent[0]).getFullYear();
         let maxYear = zoomVars.xOverviewScale.invert(extent[1]).getFullYear();
-        d3.select('#details-text').text(`publications between ${minYear}-${maxYear}`);
+        d3.select('#details-text').text(zoomVars.timelineConfiguration.detailsChartLabel(minYear, maxYear));
         zoomVars.currentDataset = zoomVars.years.filter(d => (d.year >= minYear && d.year <= maxYear));
         zoomVars.brushInit = 'automate';
         // area.select(".brush").call(brush.move, null) // This remove the grey brush area as soon as the selection has been done

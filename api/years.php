@@ -5,7 +5,7 @@ $years = [];
 $facets = solr_facet_count_query($conf['year_field'], @$_GET['query'] ?: '*:*');
 foreach ($facets as $year => $count) {
   if (preg_match('/^\d{4}$/', $year) && (int) $year < 2025) { // TODO: make configurable
-    $years[(int) $year] = $count;
+    $years[$year] = $count;
   }
 }
 ksort($years);

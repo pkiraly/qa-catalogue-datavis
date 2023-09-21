@@ -7,7 +7,7 @@ if (file_exists("configuration.cnf")) {
 }
 
 $query = @$_GET['query'] ?: '';
-$type = in_array(@$_GET['type'], ['map', 'timeline', 'zoomable-timeline', 'cataloging-timeline']) ? $_GET['type'] : 'map';
+$type = in_array(@$_GET['type'], ['map', 'timeline', 'publication-timeline', 'cataloging-timeline']) ? $_GET['type'] : 'map';
 
 ?><!DOCTYPE html>
 <html>
@@ -40,10 +40,6 @@ $type = in_array(@$_GET['type'], ['map', 'timeline', 'zoomable-timeline', 'catal
       <?php if(@$conf['qa_catalogue_base_url']) { ?>
       <a href="<?= $conf['qa_catalogue_base_url'] ?>" target="_blank">QA Catalogue</a>
       <?php } ?>
-      <?php /* ?>
-      <input type="radio" name="type" value="map" id="type-map" <?php if ($type == 'map') { ?>checked="checked"<?php } ?>><label for="type-map">holdings map</label>
-      <input type="radio" name="type" value="timeline" id="type-timeline" <?php if ($type == 'timeline') { ?>checked="checked"<?php } ?>><label for="type-timeline">publication timeline</label>
-      <?php */ ?>
       <a href="https://github.com/pkiraly/qa-catalogue-datavis#readme" title="About this software" target="_blank"><i class="fa fa-info-circle" aria-hidden="true"></i></a>
     </form>
   </header>
@@ -53,10 +49,7 @@ $type = in_array(@$_GET['type'], ['map', 'timeline', 'zoomable-timeline', 'catal
       <a class="nav-link <?php if ($type == 'map') { ?>active<?php } ?>" aria-current="page" href="?query=<?= urlencode($query) ?>&type=map">Holdings map</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link <?php if ($type == 'timeline') { ?>active<?php } ?>" href="?query=<?= urlencode($query) ?>&type=timeline">Publication timeline</a>
-    </li>
-    <li class="nav-item">
-       <a class="nav-link <?php if ($type == 'zoomable-timeline') { ?>active<?php } ?>" href="?query=<?= urlencode($query) ?>&type=zoomable-timeline">Publication timeline (zoomable)</a>
+       <a class="nav-link <?php if ($type == 'publication-timeline') { ?>active<?php } ?>" href="?query=<?= urlencode($query) ?>&type=publication-timeline">Publication timeline</a>
     </li>
     <li class="nav-item">
       <a class="nav-link <?php if ($type == 'cataloging-timeline') { ?>active<?php } ?>" href="?query=<?= urlencode($query) ?>&type=cataloging-timeline">Cataloging timeline</a>
@@ -77,17 +70,19 @@ $type = in_array(@$_GET['type'], ['map', 'timeline', 'zoomable-timeline', 'catal
     </div>  
   </div>
 
-  <div id="timeline-container"></div>
-  <div id="zoomable-timeline-container">
+  <div id="publication-timeline-container">
     <div id="chart"></div>
     <div id="overview"></div>
   </div>
-  <div id="cataloging-timeline-container"></div>
+  <div id="cataloging-timeline-container">
+    <div id="chart"></div>
+    <div id="overview"></div>
+  </div>
   <script type="text/javascript">
     let mapVis = {
       mapCreated: false,
       timelineCreated: false,
-      zoomableTimelineCreated: false,
+      publicationTimelineCreated: false,
       catalogingTimelineCreated: false,
       qaCatalogueBaseURL: '<?= $conf['qa_catalogue_base_url'] ?>',
       libraryField: '<?= $conf['library_field'] ?>',
@@ -98,7 +93,7 @@ $type = in_array(@$_GET['type'], ['map', 'timeline', 'zoomable-timeline', 'catal
     }
   </script>
   <script type="module" src="js/common.js"></script>
-  <?php if ($type == 'zoomable-timeline') { ?>
+  <?php if (in_array($type, ['publication-timeline', 'cataloging-timeline'])) { ?>
     <script type="module" src="js/zoom.js"></script>
   <?php } ?>
   <script type="module" src="index.js"></script>
