@@ -74,10 +74,12 @@ $type = in_array(@$_GET['type'], ['map', 'timeline', 'publication-timeline', 'ca
     <div id="chart"></div>
     <div id="overview"></div>
   </div>
+
   <div id="cataloging-timeline-container">
     <div id="chart"></div>
     <div id="overview"></div>
   </div>
+
   <script type="text/javascript">
     let mapVis = {
       mapCreated: false,

@@ -3,7 +3,7 @@ import { yearQueryLink } from './common.js';
 
 export class PublicationTimelineConfiguration extends ZoomableTimelineConfiguration {
     _container = '#publication-timeline-container';
-    _apiUrl = 'api/years.php';
+    _apiUrl = 'api/publication-timeline.php';
     _hasLink = true;
 
     link(query, year) {

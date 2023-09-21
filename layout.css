@@ -98,3 +98,7 @@ header a {
 .chart-label {
   font-size: 100%;
 }
+#chart, #overview  {
+  display: block;
+  clear: both;
+}

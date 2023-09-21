@@ -113,7 +113,7 @@ function selectType(selectedType) {
   if (selectedType == 'map') {
     showOnly('#map-container');
     if (!mapVis.mapCreated)
-      displayMap()
+      displayMap();
 //  } else if (selectedType == 'timeline') {
 //    showOnly('#timeline-container');
 //    if (!mapVis.timelineCreated)
@@ -130,14 +130,15 @@ function selectType(selectedType) {
 }
 
 function showOnly(container) {
-  const containers = ['#map-container', '#timeline-container', '#cataloging-timeline-container'];
+  const containers = ['#map-container', '#publication-timeline-container', '#cataloging-timeline-container'];
   for (let i = 0; i < containers.length; i++) {
     if (container == containers[i]) {
-      d3.select(containers[i]).style("visibility", "visible")
-      d3.select(containers[i]).style("display", "block")
+      d3.select(containers[i]).style("visibility", "visible");
+      let defaultDisplay = container == '#map-container' ? 'flex' : 'display';
+      d3.select(containers[i]).style("display", defaultDisplay);
     } else {
-      d3.select(containers[i]).style("visibility", "hidden")
-      d3.select(containers[i]).style("display", "none")
+      d3.select(containers[i]).style("visibility", "hidden");
+      d3.select(containers[i]).style("display", "none");
     }
   }
 }
@@ -157,7 +158,7 @@ function displayTimeline() {
       .attr("transform",
             "translate(" + margin.left + "," + margin.top + ")")
 
-  const timelineUrl = 'api/years.php?query=' + encodeURIComponent(userQuery)
+  const timelineUrl = 'api/publication-timeline.php?query=' + encodeURIComponent(userQuery)
   d3.json(timelineUrl).then(data => {
     const years = Object.keys(data).sort((a,b) => a-b).map(year => {
       return { year: +year, count: +data[year] }
@@ -243,7 +244,7 @@ function displayCatalogingTimeline() {
       .attr("transform",
           "translate(" + margin.left + "," + margin.top + ")")
 
-  const timelineUrl = 'api/cataloging_date.php?query=' + encodeURIComponent(userQuery)
+  const timelineUrl = 'api/cataloging-timeline.php?query=' + encodeURIComponent(userQuery)
   d3.json(timelineUrl).then(data => {
     const years = Object.keys(data).sort((a,b) => a-b).map(year => {
       return { year: +year, count: +data[year] }

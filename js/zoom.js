@@ -116,7 +116,7 @@ export function displayZoomableTimeline(timelineConfiguration) {
 }
 
 function updateData(apiUrl) {
-    // const timelineUrl = 'api/years.php?query=' + encodeURIComponent(mapVis.query)
+    // const timelineUrl = 'api/publication-timeline.php?query=' + encodeURIComponent(mapVis.query)
     const timelineUrl = apiUrl + '?query=' + encodeURIComponent(mapVis.query)
     d3.json(timelineUrl).then(data => {
         zoomVars.years = Object
