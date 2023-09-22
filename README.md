@@ -27,6 +27,7 @@ Configuration parameters:
 - `library_names_file` (required): file where each line contains library identifiers and library names in the format: `^\d+: \s+$`
 - `library_metadata_file` (required): CSV file containing location metadata about the libraries as "ID,city,latitude,longitude"
 - `cataloging_date_field` (optional): Solr field with cataloging data in the form `^.*:[0-9][0-9]-[0-9][0-9]-[0-9][0-9]` (e.g. `001A0_ss`)
+- `footer` (optional): PHP file to be included as footer
 
 ## Functionality
 

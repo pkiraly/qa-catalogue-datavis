@@ -100,4 +100,5 @@ $type = in_array(@$_GET['type'], ['map', 'timeline', 'publication-timeline', 'ca
   <?php } ?>
   <script type="module" src="index.js"></script>
 </body>
+<?php if (isset($conf['footer'])) include($conf['footer']); ?>
 </html>
