@@ -11,6 +11,6 @@ export class PublicationTimelineConfiguration extends ZoomableTimelineConfigurat
     }
 
     detailsChartLabel(minYear, maxYear) {
-        return `publications between ${minYear}-${maxYear}`;
+        return `publications between ${minYear} and ${maxYear}`;
     }
 }

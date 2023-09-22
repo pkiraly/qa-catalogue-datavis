@@ -46,7 +46,7 @@ export function displayZoomableTimeline(timelineConfiguration) {
         .attr('height', margin.bottom)
         .attr("x", margin.left + (zoomVars.width / 2))
         .attr("y", margin.top + zoomVars.focusHeight + (margin.bottom * 0.8))
-        .text('overview timeline - use the mouse to select area to zoom')
+        .text('overview timeline - select with mouse to zoom, double click to go back')
         .attr('text-anchor', 'middle')
     ;
 

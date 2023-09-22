@@ -5,6 +5,6 @@ export class CatalogingTimelineConfiguration extends ZoomableTimelineConfigurati
     _apiUrl = 'api/cataloging-timeline.php';
 
     detailsChartLabel(minYear, maxYear) {
-        return `catalogued between ${minYear}-${maxYear}`;
+        return `catalogued between ${minYear} and ${maxYear}`;
     }
 }
