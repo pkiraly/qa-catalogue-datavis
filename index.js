@@ -52,32 +52,6 @@ tooltipSvg.append('text')
       .attr('fill', 'maroon')
       .attr('text-anchor', 'start')
 
-const tooltip = map.append('g')
-  .attr('class', 'tooltip-group')
-  .attr('transform', `translate(0,0)`)
-  .style('font-size', '14px')
-const tooltipLineVertical = tooltip
-  .append('line')
-    .attr('id', 'tooltip-line-vertical')
-    .attr('x1', 0)
-    .attr('y1', height)
-    .attr('x2', 0)
-    .attr('y2', 0)
-    .attr('stroke', '#45343D')
-    .attr('stroke-dasharray', '16 4')
-    .attr('stroke-opacity', 0.3)
-
-const tooltipLineHorizontal = tooltip
-  .append('line')
-    .attr('id', 'tooltip-line-horizontal')
-    .attr('x1', 0)
-    .attr('y1', 0)
-    .attr('x2', width)
-    .attr('y2', 0)
-    .attr('stroke', '#45343D')
-    .attr('stroke-dasharray', '16 4')
-    .attr('stroke-opacity', 0.3)
-
 let minLat = null
 let maxLat = null
 let minLong = null

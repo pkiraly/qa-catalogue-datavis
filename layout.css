@@ -1,5 +1,9 @@
+:root {
+  --highlight-color: #37ba00;
+}
 body {
   font-family: sans-serif;
+  margin: 1em;
 }
 header {
   padding-bottom: 0.5em;
@@ -7,6 +11,10 @@ header {
 header h1 {
   display: inline;
   font-size: 1em;
+  font-weight: bold;
+}
+.nav-link.active {
+  font-weight: bold;
 }
 a {
   text-decoration: none;
@@ -23,6 +31,7 @@ a:hover {
   font-family: sans-serif;
   font-size: 0.6em;
 }
+* { box-sizing: content-box; } /* fix display of city names */
 td.city:hover {
   cursor: pointer;
 }
@@ -85,8 +94,7 @@ span.title {
   margin-left: -1em;
 }
 header a {
-  color: #063970;
-  opacity: 0.5;
+  color: var(--highlight-color);
 }
 #zoom-icons {
   position: absolute;
