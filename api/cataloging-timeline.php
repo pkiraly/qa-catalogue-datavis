@@ -1,7 +1,7 @@
 <?php
 include_once('./utils.php');
 
-if (!$conf['cataloging_date_field']) {
+if (!@$conf['cataloging_date_field']) {
   send_json(["message"=>"cataloging_date_field not configured!"], 500);
 }
 
@@ -30,6 +30,7 @@ function processResult($result) {
   $continue = count(get_object_vars($result)) > 0;
   if ($continue) {
     foreach ($result as $value => $count) {
+      // transform PICA+ field value to date
       list($library, $rawdate) = explode(':', $value);
       list($day, $month, $year) = explode('-', $rawdate);
       $year = ((int) $year < 60) ? (int) '20' . $year : (int) '19' . $year;
