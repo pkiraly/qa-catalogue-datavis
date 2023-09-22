@@ -70,9 +70,9 @@ The application internally provides a HTTP API for queries. The return format is
 
 Get a JSON object with library identifiers (optionally filtered with query parameter `ids`) mapped name and ISIL of the library.
 
-#### api/years.php
+#### api/publication-timeline.php
 
-Get a JSON Object with years mapped to number of holdings for a given `query`.
+Get a JSON object with years of publication mapped to number of holdings for a given `query`.
 
 #### api/cities.php
 
@@ -80,7 +80,7 @@ Get a JSON object with city ids mapped to name, coordinates, number of holdings 
 
 #### api/cataloging-timeline.php
 
-Get a JSON object with dates mapped to number of records for a given `query`. Optional parameter `precision` can be used to filter by `year` (default), `month` or `day`.
+Get a JSON object with dates of cataloging mapped to number of records for a given `query`. Optional parameter `precision` can be used to filter by `year` (default), `month` or `day`.
 
 ## Contributing
 
