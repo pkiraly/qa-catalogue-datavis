@@ -1,6 +1,10 @@
 <?php
+include_once('./utils.php');
 
-$conf = parse_ini_file("../configuration.cnf", false, INI_SCANNER_TYPED);
+if (!$conf['cataloging_date_field']) {
+  send_json(["message"=>"cataloging_date_field not configured!"], 500);
+}
+
 $query = @$_GET['query'] ?: '*:*';
 $precision = @$_GET['precision'] ?: 'year';
 
@@ -9,30 +13,23 @@ $offset = 0;
 $continue = false;
 $years = [];
 do {
-  $url = $conf['qa_catalogue_solr_url'] . 'select?'
-    . 'facet.limit=' . $limit . '&facet.offset=' . $offset
-    . '&facet.mincount=1&facet=on&fl=id&rows=0&json.nl=map'
-    . '&facet.field=' . $conf['cataloging_date_field']
-    . '&q=' . urlencode($query);
-  $json = json_decode(file_get_contents($url));
+  $result = solr_facet_count_query($conf['cataloging_date_field'], $query, $offset, $limit);
+  $continue = processResult($result);
   $offset += $limit;
-  $continue = processResult($json);
 } while ($continue);
 
 ksort($years);
 if (isset($years[0]))
   unset($years[0]);
 
-header('Access-Control-Allow-Origin: *');
-header('Content-type: application/json');
-print json_encode($years,JSON_PRETTY_PRINT);
+send_json($years);
 
-function processResult($json) {
+function processResult($result) {
   global $years, $conf, $precision;
 
-  $continue = count(get_object_vars($json->facet_counts->facet_fields->{$conf['cataloging_date_field']})) > 0;
+  $continue = count(get_object_vars($result)) > 0;
   if ($continue) {
-    foreach ($json->facet_counts->facet_fields->{$conf['cataloging_date_field']} as $value => $count) {
+    foreach ($result as $value => $count) {
       list($library, $rawdate) = explode(':', $value);
       list($day, $month, $year) = explode('-', $rawdate);
       $year = ((int) $year < 60) ? (int) '20' . $year : (int) '19' . $year;

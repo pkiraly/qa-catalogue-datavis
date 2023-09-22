@@ -20,7 +20,4 @@ foreach (file($file) as $line) {
   }
 }
 
-header('Access-Control-Allow-Origin: *');
-header('Content-type: application/json');
-print json_encode($libraries,JSON_PRETTY_PRINT);
-
+send_json($libraries);

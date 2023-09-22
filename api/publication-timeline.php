@@ -12,6 +12,4 @@ ksort($years);
 if (isset($years[0]))
   unset($years[0]);
 
-header('Access-Control-Allow-Origin: *');
-header('Content-type: application/json');
-print json_encode($years,JSON_PRETTY_PRINT);
+send_json($years);

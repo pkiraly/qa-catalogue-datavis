@@ -43,7 +43,4 @@ foreach($facets as $name => $city) {
   $cities[$city['id']] = $city;
 }
 
-header('Access-Control-Allow-Origin: *');
-header('Content-type: application/json');
-print json_encode($cities,JSON_PRETTY_PRINT);
-
+send_json($cities);
