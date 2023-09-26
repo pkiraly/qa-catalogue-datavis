@@ -393,9 +393,9 @@ function zoomed(event) {
 
 function render(selectedCities, europeProjection, cityScale) {
   // const selectedCities = cities
-  selectedCityIsAvailable = selectedCities.filter(d => d.id == selectedCity).length > 0
-  const bookNr = selectedCities.reduce((sum, d) => {return sum + d.n}, 0)
-  const libraryNr = selectedCities.reduce((sum, d) => {return sum + d.libraries}, 0)
+  selectedCityIsAvailable = selectedCities.filter(d => d.id == selectedCity).length > 0;
+  const bookNr = selectedCities.reduce((sum, d) => {return sum + d.n}, 0);
+  const libraryNr = selectedCities.reduce((sum, d) => {return sum + d.libraries.length}, 0);
 
   d3.select('div#value-time')
     .html(`<b>${$tc('cities',selectedCities.length)}: ${$tc('holdings',bookNr)} ${$tc('in-libraries',libraryNr)}</b>`)
