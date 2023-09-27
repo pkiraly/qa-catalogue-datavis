@@ -443,7 +443,7 @@ function render(selectedCities, europeProjection, cityScale) {
       .attr('fill-opacity', 0.5)
       .on('mouseover', (event, d) => {
         console.log("cityContainer mouseover");
-        tooltipSvg.attr('transform', `translate(${event.pageX},${event.pageY})`)
+        tooltipSvg.attr('transform', `translate(${event.pageX},${event.pageY-10})`)
                   .style('visibility', 'visible')
         d3.select('#tooltip-text').html(cityTooltipText(d))
       })
