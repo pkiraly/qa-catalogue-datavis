@@ -442,9 +442,11 @@ function render(selectedCities, europeProjection, cityScale) {
       })
       .attr('fill-opacity', 0.5)
       .on('mouseover', (event, d) => {
-        console.log("cityContainer mouseover");
-        tooltipSvg.attr('transform', `translate(${event.pageX},${event.pageY-10})`)
-                  .style('visibility', 'visible')
+        let cityCircle = d3.select('#' + d.id);
+        let x = parseFloat(cityCircle.attr("cx")) * currentScale + parseFloat(currentTranslate[0]) + 10;
+        let y = parseFloat(cityCircle.attr("cy")) * currentScale + parseFloat(currentTranslate[1]) - 10;
+        tooltipSvg.attr('transform', `translate(${x},${y})`)
+                  .style('visibility', 'visible');
         d3.select('#tooltip-text').html(cityTooltipText(d))
       })
       .on('click', (event, d) => {
