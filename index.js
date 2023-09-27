@@ -51,7 +51,12 @@ tooltipSvg.append('text')
       .attr('id', 'tooltip-text')
       .attr('fill', 'maroon')
       .attr('text-anchor', 'start')
-const tooltipLineVertical = tooltipSvg
+
+const tooltipGroup = map.append('g')
+    .attr('class', 'tooltip-group')
+    .attr('transform', `translate(0,0)`)
+    .style('font-size', '14px')
+const tooltipLineVertical = tooltipGroup
     .append('line')
     .attr('id', 'tooltip-line-vertical')
     .attr('x1', 0)
@@ -61,8 +66,7 @@ const tooltipLineVertical = tooltipSvg
     .attr('stroke', '#45343D')
     .attr('stroke-dasharray', '16 4')
     .attr('stroke-opacity', 0.3)
-
-const tooltipLineHorizontal = tooltipSvg
+const tooltipLineHorizontal = tooltipGroup
     .append('line')
     .attr('id', 'tooltip-line-horizontal')
     .attr('x1', 0)
