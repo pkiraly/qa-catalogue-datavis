@@ -51,7 +51,7 @@ tooltipSvg.append('text')
       .attr('id', 'tooltip-text')
       .attr('fill', 'maroon')
       .attr('text-anchor', 'start')
-const tooltipLineVertical = tooltip
+const tooltipLineVertical = tooltipSvg
     .append('line')
     .attr('id', 'tooltip-line-vertical')
     .attr('x1', 0)
@@ -62,7 +62,7 @@ const tooltipLineVertical = tooltip
     .attr('stroke-dasharray', '16 4')
     .attr('stroke-opacity', 0.3)
 
-const tooltipLineHorizontal = tooltip
+const tooltipLineHorizontal = tooltipSvg
     .append('line')
     .attr('id', 'tooltip-line-horizontal')
     .attr('x1', 0)
