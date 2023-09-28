@@ -10,7 +10,7 @@ $query = @$_GET['query'] ?: '';
 $type = in_array(@$_GET['type'], ['map', 'timeline', 'publication-timeline', 'cataloging-timeline']) ? $_GET['type'] : 'map';
 
 ?><!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -95,7 +95,9 @@ $type = in_array(@$_GET['type'], ['map', 'timeline', 'publication-timeline', 'ca
     }
   </script>
   <script type="module" src="js/common.js"></script>
-  <?php if (in_array($type, ['publication-timeline', 'cataloging-timeline'])) { ?>
+  <?php if ($type == 'map') { ?>
+    <script type="module" src="js/map.js"></script>
+  <?php } else if (in_array($type, ['publication-timeline', 'cataloging-timeline'])) { ?>
     <script type="module" src="js/zoom.js"></script>
   <?php } ?>
   <script type="module" src="index.js"></script>
