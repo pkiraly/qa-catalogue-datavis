@@ -44,7 +44,7 @@ function showOnly(container) {
 function displayTimeline() {
   mapVis.timelineCreated = true
   var margin = {top: 30, right: 30, bottom: 70, left: 60},
-    width = 1500 - margin.left - margin.right,
+    width = 1300 - margin.left - margin.right,
     height = 800 - margin.top - margin.bottom
 
   // append the svg object to the body of the page
@@ -125,7 +125,6 @@ function displayTimeline() {
 
   })
 }
-
 
 function displayCatalogingTimeline() {
   mapVis.catalogingTimelineCreated = true;
@@ -210,5 +209,3 @@ function displayCatalogingTimeline() {
         })
   })
 }
-
-

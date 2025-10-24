@@ -7,7 +7,7 @@ export function displayZoomableTimeline(timelineConfiguration) {
     mapVis.publicationTimelineCreated = true;
     zoomVars.timelineConfiguration = timelineConfiguration;
     const margin = {top: 30, right: 30, bottom: 40, left: 60};
-    zoomVars.outerWidth = 1500;
+    zoomVars.outerWidth = 1300;
     zoomVars.width = zoomVars.outerWidth - margin.left - margin.right;
     zoomVars.height = 400 - margin.top - margin.bottom;
     zoomVars.separation = 20;

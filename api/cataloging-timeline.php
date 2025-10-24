@@ -2,7 +2,7 @@
 include_once('./utils.php');
 
 if (!@$conf['cataloging_date_field']) {
-  send_json(["message"=>"cataloging_date_field not configured!"], 500);
+  send_json(['message' => 'cataloging_date_field not configured!'], 500);
 }
 
 $query = @$_GET['query'] ?: '*:*';
@@ -13,6 +13,7 @@ $offset = 0;
 $continue = false;
 $years = [];
 do {
+  error_log('$query: ' . $query);
   $result = solr_facet_count_query($conf['cataloging_date_field'], $query, $offset, $limit);
   $continue = processResult($result);
   $offset += $limit;
