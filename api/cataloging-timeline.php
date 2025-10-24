@@ -13,7 +13,6 @@ $offset = 0;
 $continue = false;
 $years = [];
 do {
-  error_log('$query: ' . $query);
   $result = solr_facet_count_query($conf['cataloging_date_field'], $query, $offset, $limit);
   $continue = processResult($result);
   $offset += $limit;
