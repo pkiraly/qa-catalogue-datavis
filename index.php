@@ -34,7 +34,7 @@ $type = in_array(@$_GET['type'], ['map', 'timeline', 'publication-timeline', 'ca
       Visualisation
     </h1>
     <form style="display: inline;">
-      <input type="text" name="query" id="search" value="<?= $query ?>">
+      <input type="text" name="query" id="search" value="<?= htmlencode($query) ?>">
       <input type="hidden" name="type" value="<?= $type ?>">
       <input type="submit" value="search" id="submit">
       <?php if(@$conf['qa_catalogue_base_url']) { ?>
