@@ -23,7 +23,6 @@ function solr_facet_count_query($facet, $query, $offset=0, $limit=1000) {
     . "facet.limit=$limit&facet.offset=$offset"
     . '&facet.mincount=1&facet=on&fl=id&rows=0&json.nl=map'
     . "&facet.field=$facet&q=" . urlencode($query);
-  error_log('url: ' . $url);
   $error = null;
   try {
     $response = json_decode(file_get_contents($url))->facet_counts->facet_fields->{$facet};
